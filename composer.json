@@ -1,0 +1,15 @@
+{
+    "name": "hexlet/code",
+    "description": "PHP Project #2 Difference calculator",
+    "type": "project",
+    "require": {
+        "docopt/docopt": "^1.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aleksei",
+            "email": "bxbuf-dev@outlook.com"
+        }
+    ]
+}
