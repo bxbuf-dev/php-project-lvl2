@@ -11,5 +11,13 @@
             "name": "Aleksei",
             "email": "bxbuf-dev@outlook.com"
         }
-    ]
+    ],
+    "bin": [
+        "bin/genDiff"
+    ],
+    "autoload": {
+        "files" : [
+            "src/Differ.php"
+        ]
+    }
 }
