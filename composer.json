@@ -19,5 +19,8 @@
         "files" : [
             "src/Differ.php"
         ]
+    },
+    "scripts": {
+        "phpcs": "phpcs"
     }
 }
