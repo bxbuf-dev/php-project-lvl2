@@ -4,8 +4,10 @@ namespace Differ\Differ;
 
 function genDiff(string $filePath1, string $filePath2)
 {
-    $fileData1 = json_decode(file_get_contents($filePath1), true);
-    $fileData2 = json_decode(file_get_contents($filePath2), true);
+    $file1 = file_get_contents($filePath1);
+    $file2 = file_get_contents($filePath2);
+    $fileData1 = json_decode($file1, true);
+    $fileData2 = json_decode($file2, true);
 
     $existInFirst = array_diff($fileData1, $fileData2);
     $existInSecond = array_diff($fileData2, $fileData1);
