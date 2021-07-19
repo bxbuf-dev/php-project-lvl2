@@ -6,7 +6,17 @@ function genDiff(string $filePath1, string $filePath2)
 {
     $data1 = getDataFromFile($filePath1, true);
     $data2 = getDataFromFile($filePath2, true);
+    $result = getDifference($data1, $data2);
+    return implode(PHP_EOL, $result) . PHP_EOL;
+}
 
+function getDataFromFile(string $filePath, bool $isJson): array
+{
+    return json_decode(file_get_contents($filePath), $isJson);
+}
+
+function getDifference(array $data1, array $data2): array
+{
     $data1Diff = array_diff($data1, $data2);
     $data2Diff = array_diff($data2, $data1);
     $noDiff = array_diff($data1, $data1Diff);
@@ -27,10 +37,6 @@ function genDiff(string $filePath1, string $filePath2)
             $result[] = "+ {$key}: " . json_encode($data2Diff[$key]);
         }
     }
-    return implode(PHP_EOL, $result) . PHP_EOL;
-}
 
-function getDataFromFile(string $filePath, bool $isJson): array
-{
-    return json_decode(file_get_contents($filePath), $isJson);
+    return $result;
 }
