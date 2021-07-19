@@ -30,7 +30,7 @@ function genDiff(string $filePath1, string $filePath2)
     return implode(PHP_EOL, $result) . PHP_EOL;
 }
 
-function getDataFromFile (string $filePath, bool $isJson): array
+function getDataFromFile(string $filePath, bool $isJson): array
 {
     return json_decode(file_get_contents($filePath), $isJson);
 }
