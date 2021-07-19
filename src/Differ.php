@@ -4,28 +4,33 @@ namespace Differ\Differ;
 
 function genDiff(string $filePath1, string $filePath2)
 {
-    $file1 = json_decode(file_get_contents($filePath1), true);
-    $file2 = json_decode(file_get_contents($filePath2), true);
+    $data1 = getDataFromFile($filePath1, true);
+    $data2 = getDataFromFile($filePath2, true);
 
-    $file1Diff = array_diff($file1, $file2);
-    $file2Diff = array_diff($file2, $file1);
-    $noDiff = array_diff($file1, $file1Diff);
+    $data1Diff = array_diff($data1, $data2);
+    $data2Diff = array_diff($data2, $data1);
+    $noDiff = array_diff($data1, $data1Diff);
 
-    $allKeys = array_keys(array_merge($file1, $file2));
+    $allKeys = array_keys(array_merge($data1, $data2));
     asort($allKeys, SORT_STRING);
     $allKeys = array_values($allKeys);
 
-    $result = "";
+    $result = [];
     foreach ($allKeys as $key) {
         if (array_key_exists($key, $noDiff)) {
-            $result = $result . "  {$key}: " . json_encode($noDiff[$key]) . PHP_EOL;
+            $result[] = "  {$key}: " . json_encode($noDiff[$key]);
         }
-        if (array_key_exists($key, $file1Diff)) {
-            $result = $result . "- {$key}: " . json_encode($file1Diff[$key]) . PHP_EOL;
+        if (array_key_exists($key, $data1Diff)) {
+            $result[] = "- {$key}: " . json_encode($data1Diff[$key]);
         }
-        if (array_key_exists($key, $file2Diff)) {
-            $result = $result . "+ {$key}: " . json_encode($file2Diff[$key]) . PHP_EOL;
+        if (array_key_exists($key, $data2Diff)) {
+            $result[] = "+ {$key}: " . json_encode($data2Diff[$key]);
         }
     }
-    return $result;
+    return implode(PHP_EOL, $result) . PHP_EOL;
+}
+
+function getDataFromFile (string $filePath, bool $isJson): array
+{
+    return json_decode(file_get_contents($filePath), $isJson);
 }
