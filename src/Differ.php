@@ -7,7 +7,7 @@ function genDiff(string $filePath1, string $filePath2)
     $data1 = getDataFromFile($filePath1, true);
     $data2 = getDataFromFile($filePath2, true);
     $result = getDifference($data1, $data2);
-    return implode(PHP_EOL, $result) . PHP_EOL;
+    return convertToString($result, 'str');
 }
 
 function getDataFromFile(string $filePath, bool $isJson): array
@@ -28,15 +28,26 @@ function getDifference(array $data1, array $data2): array
     $result = [];
     foreach ($allKeys as $key) {
         if (array_key_exists($key, $noDiff)) {
-            $result[] = "  {$key}: " . json_encode($noDiff[$key]);
+            $result[] = [" ", $key, $noDiff[$key]];
         }
         if (array_key_exists($key, $data1Diff)) {
-            $result[] = "- {$key}: " . json_encode($data1Diff[$key]);
+            $result[] = ["-", $key, $data1Diff[$key]];
         }
         if (array_key_exists($key, $data2Diff)) {
-            $result[] = "+ {$key}: " . json_encode($data2Diff[$key]);
+            $result[] = ["+", $key, $data2Diff[$key]];
         }
     }
 
     return $result;
+}
+
+function convertToString(array $data, string $format): string
+{
+    $result = [];
+    if ($format == 'str') {
+        foreach ($data as $key) {
+            $result[] = "{$key[0]} {$key[1]}: " . json_encode($key[2]);
+        }
+    }
+    return implode(PHP_EOL, $result) . PHP_EOL;
 }
