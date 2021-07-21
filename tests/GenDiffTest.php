@@ -27,15 +27,6 @@ class GenDiffTest extends TestCase
         ['name' => 'timeout', 'stat' => '+', 'value' => 50],
         ['name' => 'verbose', 'stat' => '+', 'value' => true]
     ];
-    private $diffString = <<<DOC
-    - follow: false
-      host: "hexlet.io"
-    - proxy: "112.235.25.18"
-    - timeout: 20
-    + timeout: 50
-    + verbose: true
-
-    DOC;
     public function testGetDifference(): void
     {
         $this->assertEquals(
@@ -47,11 +38,12 @@ class GenDiffTest extends TestCase
             []
         );
     }
-    public function testConvertToString()
+    public function testConvertToString(): void
     {
+        $diffString = file_get_contents(__DIR__ . '/fixtures/FilesDifference.txt');
         assertEquals(
             convertToString($this->diffData),
-            $this->diffString
+            $diffString
         );
     }
 }

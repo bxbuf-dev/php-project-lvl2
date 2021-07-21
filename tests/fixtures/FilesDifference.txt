@@ -1,0 +1,6 @@
+- follow: false
+  host: "hexlet.io"
+- proxy: "112.235.25.18"
+- timeout: 20
++ timeout: 50
++ verbose: true
