@@ -1,9 +1,9 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Linter
+name: Tests
 on: push
 jobs:
-  linter-check:
+  Run-tests:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -11,5 +11,5 @@ jobs:
       - name: Install enviroment
         run: composer install
       # Runs a single command using the runners shell
-      - name: Run a linter
-        run: make lint
+      - name: Run tests
+        run: make test
