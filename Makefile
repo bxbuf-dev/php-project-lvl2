@@ -6,3 +6,5 @@ autoload:
 	composer dump-autoload
 install:
 	composer install
+test:
+	composer exec --verbose phpunit tests
