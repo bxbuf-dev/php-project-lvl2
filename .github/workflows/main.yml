@@ -11,5 +11,7 @@ jobs:
       - name: Install enviroment
         run: composer install
       # Runs a single command using the runners shell
-      - name: Run a one-line script
+      - name: Run a linter
         run: make lint
+      - name: Run tests
+        run: make test
