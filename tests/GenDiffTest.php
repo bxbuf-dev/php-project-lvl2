@@ -4,29 +4,33 @@ namespace Differ\Differ\Tests;
 use PHPUnit\Framework\TestCase;
 use function Differ\Differ\getDifference;
 use function Differ\Differ\convertToString;
-use function PHPUnit\Framework\assertEquals;
+use function Differ\Differ\genDiff;
 
 class GenDiffTest extends TestCase
 {
     private $data1 = [
         'follow' => false,
         'host' => 'hexlet.io',
-        'proxy' => "112.235.25.18",
-        'timeout' => 20
+        'proxy' => "123.234.53.22",
+        'timeout' => 50
     ];
     private $data2 = [
         'host' => 'hexlet.io',
-        'timeout' => 50,
+        'timeout' => 20,
         'verbose' => true
     ];
     private $diffData = [
         ['name' => 'follow', 'stat' => '-', 'value' => false],
         ['name' => 'host', 'stat' => ' ', 'value' => 'hexlet.io'],
-        ['name' => 'proxy', 'stat' => '-', 'value' => '112.235.25.18'],
-        ['name' => 'timeout', 'stat' => '-', 'value' => 20],
-        ['name' => 'timeout', 'stat' => '+', 'value' => 50],
+        ['name' => 'proxy', 'stat' => '-', 'value' => '123.234.53.22'],
+        ['name' => 'timeout', 'stat' => '-', 'value' => 50],
+        ['name' => 'timeout', 'stat' => '+', 'value' => 20],
         ['name' => 'verbose', 'stat' => '+', 'value' => true]
     ];
+    private function getDiffString(): string
+    {
+        return file_get_contents(__DIR__ . '/fixtures/FilesDifference.txt');
+    }
     public function testGetDifference(): void
     {
         $this->assertEquals(
@@ -40,10 +44,18 @@ class GenDiffTest extends TestCase
     }
     public function testConvertToString(): void
     {
-        $diffString = file_get_contents(__DIR__ . '/fixtures/FilesDifference.txt');
-        assertEquals(
+        $this->assertEquals(
             convertToString($this->diffData),
-            $diffString
+            $this->getDiffString()
+        );
+    }
+    public function testGenDiff()
+    {
+        $filePath1 = __DIR__ . '/fixtures/file1.json';
+        $filePath2 = __DIR__ . '/fixtures/file2.json';
+        $this->assertEquals(
+            genDiff($filePath1, $filePath2),
+            $this->getDiffString()
         );
     }
 }
