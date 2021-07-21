@@ -28,28 +28,15 @@ function getDifference(array $data1, array $data2): array
     $result = [];
     foreach ($allKeys as $key) {
         if (array_key_exists($key, $noDiff)) {
-            $result[] = [
-                'stat' => " ",
-                'name' => $key,
-                'value' => $noDiff[$key]
-            ];
+            $result[] = ['stat' => " ", 'name' => $key, 'value' => $noDiff[$key]];
         }
         if (array_key_exists($key, $data1Diff)) {
-            $result[] = [
-                'stat' => "-",
-                'name' => $key,
-                'value' => $data1Diff[$key]
-            ];
+            $result[] = ['stat' => "-", 'name' => $key, 'value' => $data1Diff[$key]];
         }
         if (array_key_exists($key, $data2Diff)) {
-            $result[] = [
-                'stat' => "+",
-                'name' => $key,
-                'value' => $data2Diff[$key]
-            ];
+            $result[] = ['stat' => "+", 'name' => $key, 'value' => $data2Diff[$key]];
         }
     }
-
     return $result;
 }
 
