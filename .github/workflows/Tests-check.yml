@@ -11,6 +11,8 @@ jobs:
       - name: Install dependences
         run: composer install
       # Runs a single command using the runners shell
+      - name: GIthub Workplace
+        run: echo ${{github.workplace}
       #- name: Run tests
       #  run: make test
       - name: Run test & publish code coverage
