@@ -10,9 +10,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install dependences
         run: composer install
-      # Runs a single command using the runners shell
-      #- name: Run tests
-      #  run: make test
       - name: Run test & publish code coverage
         uses: paambaati/codeclimate-action@v2.6.0
         # Add Code Climate secret key
@@ -23,3 +20,5 @@ jobs:
           coverageCommand: make test-coverage
           coverageLocations: ${{github.workplace}}/build/logs/clover.xml:clover
           debug: true
+      - name: Run Linter check
+        run: make lint
