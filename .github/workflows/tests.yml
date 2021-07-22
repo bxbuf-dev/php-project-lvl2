@@ -8,8 +8,17 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - name: Install enviroment
+      - name: Install dependences
         run: composer install
       # Runs a single command using the runners shell
-      - name: Run tests
-        run: make test
+      #- name: Run tests
+      #  run: make test
+      - name: Run test & publish code coverage
+        uses: paambaati/codeclimate-action@v2.6.0
+        # Add Code Climate secret key
+        env:
+          CC_TEST_REPORTER_ID: ${{ secret_CC_TEST_REP_ID}}
+        with:
+          coverageCommand: make test-coverage
+          coverageLocations: ${{github.workplace}}/build/logs/clover.xml:clover
+          debug: true
