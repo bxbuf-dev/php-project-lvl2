@@ -10,7 +10,7 @@ function getDataFromFile(string $filePath): array
     switch ($fileType) {
         case ".json":
             return json_decode(file_get_contents($filePath), true);
-        case ".yml":
+        case ".yml" || "yaml":
             return Yaml::parse(file_get_contents($filePath));
     }
 }
