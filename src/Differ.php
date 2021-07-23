@@ -2,8 +2,8 @@
 
 namespace Differ\Differ;
 
-use function Differ\Differ\InOut\getDataFromFile;
-use function Differ\Differ\InOut\convertToString;
+use function Differ\Differ\Parsers\getDataFromFile;
+use function Differ\Differ\Parsers\convertToString;
 
 const STAT_NO_DIFF = " ";
 const STAT_DIF_IN_1 = "-";

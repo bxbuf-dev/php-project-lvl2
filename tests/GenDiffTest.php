@@ -3,7 +3,7 @@ namespace Differ\Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
 use function Differ\Differ\getDifference;
-use function Differ\Differ\InOut\convertToString;
+use function Differ\Differ\Parsers\convertToString;
 use function Differ\Differ\genDiff;
 
 class GenDiffTest extends TestCase
