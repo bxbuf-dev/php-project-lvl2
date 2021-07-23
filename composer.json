@@ -4,7 +4,8 @@
     "type": "project",
     "require": {
         "docopt/docopt": "^1.0",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "symfony/yaml": "^5.3"
     },
     "license": "MIT",
     "authors": [
@@ -18,7 +19,8 @@
     ],
     "autoload": {
         "files" : [
-            "src/Differ.php"
+            "src/Differ.php",
+            "src/InOut.php"
         ]
     },
     "scripts": {
