@@ -20,7 +20,7 @@
     "autoload": {
         "files" : [
             "src/Differ.php",
-            "src/InOut.php"
+            "src/Parsers.php"
         ]
     },
     "scripts": {

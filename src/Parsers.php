@@ -7,7 +7,7 @@ use Symfony\Component\Yaml\Yaml;
 function getDataFromFile(string $filePath): array
 {
     $fileType = strstr($filePath, '.');
-    switch ($fileType) { 
+    switch ($fileType) {
         case ".json":
             return json_decode(file_get_contents($filePath), true);
         case ".yml":
