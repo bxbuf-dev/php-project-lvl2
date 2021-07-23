@@ -3,7 +3,7 @@ namespace Differ\Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
 use function Differ\Differ\getDifference;
-use function Differ\Differ\convertToString;
+use function Differ\Differ\InOut\convertToString;
 use function Differ\Differ\genDiff;
 
 class GenDiffTest extends TestCase
@@ -51,10 +51,16 @@ class GenDiffTest extends TestCase
     }
     public function testGenDiff()
     {
-        $filePath1 = __DIR__ . '/fixtures/file1.json';
-        $filePath2 = __DIR__ . '/fixtures/file2.json';
+        $jsonPath1 = __DIR__ . '/fixtures/file1.json';
+        $jsonPath2 = __DIR__ . '/fixtures/file2.json';
         $this->assertEquals(
-            genDiff($filePath1, $filePath2),
+            genDiff($jsonPath1, $jsonPath2),
+            $this->getDiffString()
+        );
+        $yamlPath1 = __DIR__ . '/fixtures/file1.yml';
+        $yamlPath2 = __DIR__ . '/fixtures/file2.yml';
+        $this->assertEquals(
+            genDiff($yamlPath1, $yamlPath2),
             $this->getDiffString()
         );
     }
