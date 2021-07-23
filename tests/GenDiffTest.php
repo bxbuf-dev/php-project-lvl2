@@ -57,7 +57,7 @@ class GenDiffTest extends TestCase
             genDiff($jsonPath1, $jsonPath2),
             $this->getDiffString()
         );
-        $yamlPath1 = __DIR__ . '/fixtures/file1.yml';
+        $yamlPath1 = __DIR__ . '/fixtures/file1.yaml';
         $yamlPath2 = __DIR__ . '/fixtures/file2.yml';
         $this->assertEquals(
             genDiff($yamlPath1, $yamlPath2),
