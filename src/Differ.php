@@ -2,17 +2,20 @@
 
 namespace Differ\Differ;
 
+use function Differ\Differ\InOut\getDataFromFile;
+use function Differ\Differ\InOut\convertToString;
+
+const STAT_NO_DIFF = " ";
+const STAT_DIF_IN_1 = "-";
+const STAT_DIF_IN_2 = "+";
+
 function genDiff(string $filePath1, string $filePath2)
 {
-    $data1 = getDataFromFile($filePath1, true);
-    $data2 = getDataFromFile($filePath2, true);
+    $data1 = getDataFromFile($filePath1);
+    $data2 = getDataFromFile($filePath2);
     $result = getDifference($data1, $data2);
-    return convertToString($result);
-}
 
-function getDataFromFile(string $filePath, bool $isJson): array
-{
-    return json_decode(file_get_contents($filePath), $isJson);
+    return convertToString($result);
 }
 
 function getDifference(array $data1, array $data2): array
@@ -28,23 +31,14 @@ function getDifference(array $data1, array $data2): array
     $result = [];
     foreach ($allKeys as $key) {
         if (array_key_exists($key, $noDiff)) {
-            $result[] = ['stat' => " ", 'name' => $key, 'value' => $noDiff[$key]];
+            $result[] = ['stat' => STAT_NO_DIFF, 'name' => $key, 'value' => $noDiff[$key]];
         }
         if (array_key_exists($key, $data1Diff)) {
-            $result[] = ['stat' => "-", 'name' => $key, 'value' => $data1Diff[$key]];
+            $result[] = ['stat' => STAT_DIF_IN_1, 'name' => $key, 'value' => $data1Diff[$key]];
         }
         if (array_key_exists($key, $data2Diff)) {
-            $result[] = ['stat' => "+", 'name' => $key, 'value' => $data2Diff[$key]];
+            $result[] = ['stat' => STAT_DIF_IN_2, 'name' => $key, 'value' => $data2Diff[$key]];
         }
     }
     return $result;
-}
-
-function convertToString(array $data): string
-{
-    $result = [];
-    foreach ($data as $key) {
-        $result[] = "{$key['stat']} {$key['name']}: " . json_encode($key['value']);
-    }
-    return implode(PHP_EOL, $result) . PHP_EOL;
 }
