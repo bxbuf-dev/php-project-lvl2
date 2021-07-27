@@ -4,6 +4,7 @@ namespace Differ\Differ\Tests;
 use PHPUnit\Framework\TestCase;
 use function Differ\Differ\getDifference;
 use function Differ\Differ\Parsers\convertToString;
+use function Differ\Differ\Parsers\parseSingleDiff;
 use function Differ\Differ\Parsers\stylish;
 
 use function Differ\Differ\DifStructure\sortDifNotes;
@@ -112,7 +113,15 @@ class GenDiffTest extends TestCase
             convertToString($this->flatDiffData)
         );
     }
-
+    public function testParseSingleDif()
+    {
+        $difNote = ['name' => 'host', 'stat' => '+', 'value' => 'hexlet.io'];
+        $difExp = "+ host: hexlet.io";
+        $this->assertEquals(
+            $difExp,
+            parseSingleDiff($difNote)
+        );
+    }
     public function testGenDiff()
     {
         $jsonPath1 = __DIR__ . '/fixtures/file1.json';

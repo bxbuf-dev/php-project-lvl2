@@ -19,6 +19,15 @@ function getDataFromFile(string $filePath): array
     }
 }
 
+
+function parseSingleDiff($difNote): string
+{
+    $name = getName($difNote);
+    $stat = getStat($difNote);
+    $value = getValue($difNote);
+    return str_replace('"', '', "{$stat} {$name}: " . json_encode($value, JSON_PRETTY_PRINT));
+}
+
 function convertToString(array $difNotes): string
 {
     $result = [];
