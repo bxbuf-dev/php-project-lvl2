@@ -62,6 +62,5 @@ function getDifference(array $data1, array $data2): array
             }
         }
     }
-    print_r($difNotes);
     return $difNotes;
 }

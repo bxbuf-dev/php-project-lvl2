@@ -88,7 +88,6 @@ class GenDiffTest extends TestCase
 
     public function testGetDifference(): void
     {
-        /*
         $this->assertEquals(
             $this->flatDiffData,
             getDifference($this->flatJson1, $this->flatJson2)
@@ -97,13 +96,13 @@ class GenDiffTest extends TestCase
             [],
             getDifference([], [])
         );
-        */
+    
         $this->assertEquals(
             $this->oneLevelDataDiff,
             getDifference($this->oneLevelData1, $this->oneLevelData2)
         );
     }
-
+/*
     public function testConvertToString(): void
     {
         $this->assertEquals(
@@ -111,7 +110,7 @@ class GenDiffTest extends TestCase
             convertToString($this->flatDiffData)
         );
     }
-/*
+
     public function testGenDiff()
     {
         $jsonPath1 = __DIR__ . '/fixtures/file1.json';
