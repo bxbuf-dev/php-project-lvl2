@@ -4,10 +4,13 @@ namespace Differ\Differ;
 
 use function Differ\Differ\Parsers\getDataFromFile;
 use function Differ\Differ\Parsers\convertToString;
+use function Differ\Differ\Parsers\stylish;
+use function Differ\Differ\DifStructure\setDifNote;
+use function Differ\Differ\DifStructure\sortDifNotes;
 
-const STAT_NO_DIFF = " ";
-const STAT_DIF_IN_1 = "-";
-const STAT_DIF_IN_2 = "+";
+const STAT_NO_DIFF = ' ';
+const STAT_DIF_IN_1 = '-';
+const STAT_DIF_IN_2 = '+';
 
 function genDiff(string $filePath1, string $filePath2)
 {
@@ -16,29 +19,49 @@ function genDiff(string $filePath1, string $filePath2)
     $result = getDifference($data1, $data2);
 
     return convertToString($result);
+//    return $result;
+//    return stylish($result);
 }
 
 function getDifference(array $data1, array $data2): array
 {
-    $data1Diff = array_diff($data1, $data2);
-    $data2Diff = array_diff($data2, $data1);
-    $noDiff = array_diff($data1, $data1Diff);
+    $difNotes = [];
+    $keys1 = array_keys($data1);
+    $keys2 = array_keys($data2);
 
-    $allKeys = array_keys(array_merge($data1, $data2));
-    asort($allKeys, SORT_STRING);
+    $key1Only = array_diff($keys1, $keys2);
+    $key2Only = array_diff($keys2, $keys1);
+    $keyBoth = array_diff($keys1, $key1Only);
+    //get full sorted list of keys from both data arrays
+    //in order not to sort result afterwards
+    $allKeys = array_merge($key1Only, $key2Only, $keyBoth);
+    asort($allKeys);
     $allKeys = array_values($allKeys);
 
-    $result = [];
     foreach ($allKeys as $key) {
-        if (array_key_exists($key, $noDiff)) {
-            $result[] = ['stat' => STAT_NO_DIFF, 'name' => $key, 'value' => $noDiff[$key]];
+        if (in_array($key, $key1Only)) {
+            $difNotes[] = setDifNote($key, $data1[$key], STAT_DIF_IN_1);
         }
-        if (array_key_exists($key, $data1Diff)) {
-            $result[] = ['stat' => STAT_DIF_IN_1, 'name' => $key, 'value' => $data1Diff[$key]];
+        if (in_array($key, $key2Only)) {
+            $difNotes[] = setDifNote($key, $data2[$key], STAT_DIF_IN_2);
         }
-        if (array_key_exists($key, $data2Diff)) {
-            $result[] = ['stat' => STAT_DIF_IN_2, 'name' => $key, 'value' => $data2Diff[$key]];
-        }
+        if (in_array($key, $keyBoth)) {
+            // array vs array
+            if (is_array($data1[$key]) && is_array($data2[$key])) {
+                $difNotes[] = setDifNote(
+                    $key,
+                    getDifference($data1[$key], $data2[$key]),
+                    STAT_NO_DIFF
+                );
+            // array vs value or value vs array
+            } elseif ($data1[$key] == $data2[$key]) {
+                    $difNotes[] = setDifNote($key, $data1[$key], STAT_NO_DIFF);
+                } else {
+                    $difNotes[] = setDifNote($key, $data1[$key], STAT_DIF_IN_1);
+                    $difNotes[] = setDifNote($key, $data2[$key], STAT_DIF_IN_2);
+                }
+            }
     }
-    return $result;
+    print_r($difNotes);
+    return $difNotes;
 }
