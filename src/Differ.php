@@ -37,7 +37,7 @@ function getDifference(array $data1, array $data2): array
     $allKeys = array_merge($key1Only, $key2Only, $keyBoth);
     asort($allKeys);
     $allKeys = array_values($allKeys);
-
+    // create dif structure by the kyes sorted prevously
     foreach ($allKeys as $key) {
         if (in_array($key, $key1Only)) {
             $difNotes[] = setDifNote($key, $data1[$key], STAT_DIF_IN_1);

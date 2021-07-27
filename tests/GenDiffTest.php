@@ -4,6 +4,8 @@ namespace Differ\Differ\Tests;
 use PHPUnit\Framework\TestCase;
 use function Differ\Differ\getDifference;
 use function Differ\Differ\Parsers\convertToString;
+use function Differ\Differ\Parsers\stylish;
+
 use function Differ\Differ\DifStructure\sortDifNotes;
 use function Differ\Differ\genDiff;
 
@@ -102,7 +104,7 @@ class GenDiffTest extends TestCase
             getDifference($this->oneLevelData1, $this->oneLevelData2)
         );
     }
-/*
+
     public function testConvertToString(): void
     {
         $this->assertEquals(
@@ -125,21 +127,14 @@ class GenDiffTest extends TestCase
             genDiff($yamlPath1, $yamlPath2),
             $this->getDiffString()
         );
-
-        $jsonPath1 = __DIR__ . '/fixtures/C_file1.json';
-        $jsonPath2 = __DIR__ . '/fixtures/C_file2.json';
-        $this->assertEquals(
-            genDiff($jsonPath1, $jsonPath2),
-            $this->getDiffFormatted()
-        );
-
     }
-*/
+
     private function getDiffString(): string
     {
         return file_get_contents(__DIR__ . '/fixtures/FilesDifference.txt');
     }
-    private function getDiffFormatted(): string
+
+    private function getDiffStylish(): string
     {
         return file_get_contents(__DIR__ . '/fixtures/C_FilesDifference.txt');
     }

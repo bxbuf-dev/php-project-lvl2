@@ -12,10 +12,17 @@ function setDifNote(string $key, $value, string $stat): array
     return $dif;
 }
 
-function sortDifNotes($difNotes): array
+function getStat($dif)
 {
-    $name  = array_column($difNotes, 'name');
-    $stat = array_column($difNotes, 'stat');
-    array_multisort($name, SORT_ASC, $stat, SORT_DESC, $difNotes);
-    return $difNotes;
+    return $dif['stat'];
+}
+
+function getName($dif)
+{
+    return $dif['name'];
+}
+
+function getValue($dif)
+{
+    return $dif['value'];
 }
