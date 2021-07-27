@@ -55,12 +55,12 @@ function getDifference(array $data1, array $data2): array
                 );
             // array vs value or value vs array
             } elseif ($data1[$key] == $data2[$key]) {
-                    $difNotes[] = setDifNote($key, $data1[$key], STAT_NO_DIFF);
-                } else {
-                    $difNotes[] = setDifNote($key, $data1[$key], STAT_DIF_IN_1);
-                    $difNotes[] = setDifNote($key, $data2[$key], STAT_DIF_IN_2);
-                }
+                $difNotes[] = setDifNote($key, $data1[$key], STAT_NO_DIFF);
+            } else {
+                $difNotes[] = setDifNote($key, $data1[$key], STAT_DIF_IN_1);
+                $difNotes[] = setDifNote($key, $data2[$key], STAT_DIF_IN_2);
             }
+        }
     }
     print_r($difNotes);
     return $difNotes;
