@@ -6,6 +6,7 @@ use function Differ\Differ\getDifference;
 use function Differ\Differ\Parsers\convertToString;
 use function Differ\Differ\Parsers\parseSingleDiff;
 use function Differ\Differ\Parsers\stylish;
+use function Differ\Differ\DifStructure\setDifNote;
 
 use function Differ\Differ\DifStructure\sortDifNotes;
 use function Differ\Differ\genDiff;
@@ -49,48 +50,13 @@ class GenDiffTest extends TestCase
         "+ verbose: true" . PHP_EOL .
         "}" . PHP_EOL;
 
-    private $oneLevelData1 = [
-        'proxy' => "123.234.53.22",
-        'misc' => [
-            'timeout' => 50,
-            'follow' => false
-        ],
-        'host' => 'hexlet.io',
-        'type' => [
-            'value' => 25,
-            'subType' => 'some type'
-        ]
-    ];
-    private $oneLevelData2 = [
-        'host' => 'hexlet.io',
-        'misc' => [
-            'verbose' => true,
-            'timeout' => 20
-        ]
-    ];
-    private $oneLevelDataDiff = [
-        ['name' => 'host', 'stat' => ' ', 'value' => 'hexlet.io'],
-        ['name' => 'misc',
-            'stat' => ' ',
-            'value' => [
-                ['name' => 'follow', 'stat' => '-', 'value' => false],
-                ['name' => 'timeout', 'stat' => '-', 'value' => 50],
-                ['name' => 'timeout', 'stat' => '+', 'value' => 20],
-                ['name' => 'verbose', 'stat' => '+', 'value' => true]
-            ]
-        ],
-        ['name' => 'proxy', 'stat' => '-', 'value' => '123.234.53.22'],
-        ['name' => 'type',
-            'stat' => '-',
-            'value' => [
-                'value' => 25,
-                'subType' => 'some type'
-            ]
-        ]
-    ];
+
+
+
 
     public function testGetDifference(): void
     {
+
         $this->assertEquals(
             $this->flatDiffData,
             getDifference($this->flatJson1, $this->flatJson2)
@@ -99,10 +65,49 @@ class GenDiffTest extends TestCase
             [],
             getDifference([], [])
         );
-    
+
+        $oneLevelData1 = [
+            'proxy' => "123.234.53.22",
+            'misc' => [
+                'timeout' => 50,
+                'follow' => false
+            ],
+            'host' => 'hexlet.io',
+            'type' => [
+                'value' => 25,
+                'subType' => 'some type'
+            ]
+        ];
+        $oneLevelData2 = [
+            'host' => 'hexlet.io',
+            'misc' => [
+                'verbose' => true,
+                'timeout' => 20
+            ]
+        ];
+        $oneLevelDataDiff = [
+            ['name' => 'host', 'stat' => ' ', 'value' => 'hexlet.io'],
+            ['name' => 'misc',
+                'stat' => ' ',
+                'value' => [
+                    ['name' => 'follow', 'stat' => '-', 'value' => false],
+                    ['name' => 'timeout', 'stat' => '-', 'value' => 50],
+                    ['name' => 'timeout', 'stat' => '+', 'value' => 20],
+                    ['name' => 'verbose', 'stat' => '+', 'value' => true]
+                ]
+            ],
+            ['name' => 'proxy', 'stat' => '-', 'value' => '123.234.53.22'],
+            ['name' => 'type',
+                'stat' => '-',
+                'value' => [
+                    ['name' => 'value', 'value' => 25, 'stat' => ' '],
+                    ['name' => 'subType', 'value' => 'some type', 'stat' => ' ']
+                ]
+            ]
+        ];
         $this->assertEquals(
-            $this->oneLevelDataDiff,
-            getDifference($this->oneLevelData1, $this->oneLevelData2)
+            $oneLevelDataDiff,
+            getDifference($oneLevelData1, $oneLevelData2)
         );
     }
 
@@ -122,6 +127,7 @@ class GenDiffTest extends TestCase
             parseSingleDiff($difNote)
         );
     }
+
     public function testGenDiff()
     {
         $jsonPath1 = __DIR__ . '/fixtures/file1.json';
@@ -135,6 +141,37 @@ class GenDiffTest extends TestCase
         $this->assertEquals(
             $this->getDiffString(),
             genDiff($yamlPath1, $yamlPath2)
+        );
+    }
+
+    public function testSetDiffNote(): void
+    {
+        $key = 'testKey0';
+        $value = [
+            'testKey0-0' => 'value0-0',
+            'testKey0-1' => $this->flatJson1];
+        $stat = '+';
+
+        $expRes = [
+            'name' => 'testKey0',
+            'stat' => '+',
+            'value' => [
+                ['name' => 'testKey0-0', 'value' => 'value0-0', 'stat' => ' '],
+                [
+                    'name' => 'testKey0-1',
+                    'stat' => ' ',
+                    'value' => [
+                        ['name' => 'follow', 'value' => false, 'stat' => ' '],
+                        ['name' => 'host', 'value' => 'hexlet.io', 'stat' => ' '],
+                        ['name' => 'proxy', 'value' => "123.234.53.22", 'stat' => ' '],
+                        ['name' => 'timeout', 'value' => 50, 'stat' => ' ']
+                    ]
+                ]
+            ]
+        ];
+        $this->assertEquals(
+            $expRes,
+            setDifNote($key, $value, $stat)
         );
     }
 

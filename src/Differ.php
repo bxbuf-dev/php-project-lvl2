@@ -23,42 +23,40 @@ function genDiff(string $filePath1, string $filePath2)
 //    return stylish($result);
 }
 
-function getDifference(array $data1, array $data2): array
+function getDifference(array $first, array $second): array
 {
-    $difNotes = [];
-    $keys1 = array_keys($data1);
-    $keys2 = array_keys($data2);
+    $keys1 = array_keys($first);
+    $keys2 = array_keys($second);
 
-    $key1Only = array_diff($keys1, $keys2);
-    $key2Only = array_diff($keys2, $keys1);
-    $keyBoth = array_diff($keys1, $key1Only);
+    $inFirstOnly = array_diff($keys1, $keys2);
+    $inSecondOnly = array_diff($keys2, $keys1);
+    $inBoth = array_diff($keys1, $inFirstOnly);
+
     //get full sorted list of keys from both data arrays
     //in order not to sort result afterwards
-    $allKeys = array_merge($key1Only, $key2Only, $keyBoth);
+    $allKeys = array_merge($inFirstOnly, $inSecondOnly, $inBoth);
     asort($allKeys);
     $allKeys = array_values($allKeys);
     // create dif structure by the kyes sorted prevously
+    $difNotes = [];
     foreach ($allKeys as $key) {
-        if (in_array($key, $key1Only)) {
-            $difNotes[] = setDifNote($key, $data1[$key], STAT_DIF_IN_1);
+        if (in_array($key, $inFirstOnly)) {
+            $difNotes[] = setDifNote($key, $first[$key], STAT_DIF_IN_1);
         }
-        if (in_array($key, $key2Only)) {
-            $difNotes[] = setDifNote($key, $data2[$key], STAT_DIF_IN_2);
+        if (in_array($key, $inSecondOnly)) {
+            $difNotes[] = setDifNote($key, $second[$key], STAT_DIF_IN_2);
         }
-        if (in_array($key, $keyBoth)) {
+        if (in_array($key, $inBoth)) {
             // array vs array
-            if (is_array($data1[$key]) && is_array($data2[$key])) {
-                $difNotes[] = setDifNote(
-                    $key,
-                    getDifference($data1[$key], $data2[$key]),
-                    STAT_NO_DIFF
-                );
+            if (is_array($first[$key]) && is_array($second[$key])) {
+                $dif = getDifference($first[$key], $second[$key]);
+                $difNotes[] = setDifNote($key, $dif, STAT_NO_DIFF, false);
             // array vs value or value vs array
-            } elseif ($data1[$key] == $data2[$key]) {
-                $difNotes[] = setDifNote($key, $data1[$key], STAT_NO_DIFF);
+            } elseif ($first[$key] === $second[$key]) {
+                $difNotes[] = setDifNote($key, $first[$key], STAT_NO_DIFF);
             } else {
-                $difNotes[] = setDifNote($key, $data1[$key], STAT_DIF_IN_1);
-                $difNotes[] = setDifNote($key, $data2[$key], STAT_DIF_IN_2);
+                $difNotes[] = setDifNote($key, $first[$key], STAT_DIF_IN_1);
+                $difNotes[] = setDifNote($key, $second[$key], STAT_DIF_IN_2);
             }
         }
     }

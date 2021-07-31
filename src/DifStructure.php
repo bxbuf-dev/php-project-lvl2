@@ -2,11 +2,19 @@
 
 namespace Differ\Differ\DifStructure;
 
-function setDifNote(string $key, $value, string $stat): array
+function setDifNote(string $key, $value, string $stat, $parsValue = true): array
 {
+    if (is_array($value) && $parsValue) {
+        $newValue = [];
+        foreach ($value as $k => $v) {
+            $newValue[] = setDifNote($k, $v, " ");
+        }
+    } else {
+        $newValue = $value;
+    }
     $dif = [
         'name' => $key,
-        'value' => $value,
+        'value' => $newValue,
         'stat' => $stat
     ];
     return $dif;
