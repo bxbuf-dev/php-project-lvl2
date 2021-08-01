@@ -4,17 +4,14 @@ namespace Differ\Differ\DifStructure;
 
 function setDifNote(string $key, $value, string $stat, $parsValue = true): array
 {
-    if (is_array($value) && $parsValue) {
-        $newValue = [];
-        foreach ($value as $k => $v) {
-            $newValue[] = setDifNote($k, $v, " ");
-        }
-    } else {
-        $newValue = $value;
-    }
     $dif = [
         'name' => $key,
-        'value' => $newValue,
+        'value' => is_array($value) && $parsValue ?
+            array_map(
+                fn ($k, $v) => setDifNote($k, $v, " "),
+                array_keys($value),
+                array_values($value)
+            ) : $value,
         'stat' => $stat
     ];
     return $dif;
