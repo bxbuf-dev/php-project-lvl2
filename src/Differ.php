@@ -30,13 +30,16 @@ function getDifference(array $first, array $second): array
     $inSecondOnly = array_diff($keys2, $keys1);
     $inBoth = array_diff($keys1, $inFirstOnly);
 
-    $difNotes = [];
-    foreach ($inFirstOnly as $key) {
-        $difNotes[] = setDifNote($key, $first[$key], STAT_DIF_IN_1);
-    }
-    foreach ($inSecondOnly as $key) {
-            $difNotes[] = setDifNote($key, $second[$key], STAT_DIF_IN_2);
-    }
+    $difNotes1 = array_map(
+        fn ($k) => setDifNote($k, $first[$k], STAT_DIF_IN_1),
+        $inFirstOnly
+    );
+    $difNotes2 = array_map(
+        fn ($k) => setDifNote($k, $second[$k], STAT_DIF_IN_2),
+        $inSecondOnly
+    );
+    $difNotes = array_merge($difNotes1, $difNotes2);
+
     foreach ($inBoth as $key) {
         // array vs array
         if (is_array($first[$key]) && is_array($second[$key])) {
