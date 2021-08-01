@@ -5,10 +5,10 @@ use PHPUnit\Framework\TestCase;
 use function Differ\Differ\getDifference;
 use function Differ\Differ\Parsers\convertToString;
 use function Differ\Differ\Parsers\parseSingleDiff;
-use function Differ\Differ\Parsers\stylish;
 use function Differ\Differ\DifStructure\setDifNote;
-
 use function Differ\Differ\DifStructure\sortDifNotes;
+
+use function Differ\Differ\Parsers\stylish;
 use function Differ\Differ\genDiff;
 
 class GenDiffTest extends TestCase
@@ -49,10 +49,6 @@ class GenDiffTest extends TestCase
         "+ timeout: 20" . PHP_EOL .
         "+ verbose: true" . PHP_EOL .
         "}" . PHP_EOL;
-
-
-
-
 
     public function testGetDifference(): void
     {
@@ -108,6 +104,22 @@ class GenDiffTest extends TestCase
         $this->assertEquals(
             $oneLevelDataDiff,
             getDifference($oneLevelData1, $oneLevelData2)
+        );
+        $difNotesUnsorted = [
+            ['name' => 'timeout', 'stat' => '+', 'value' => 20],
+            ['name' => 'follow', 'stat' => '-', 'value' => false],
+            ['name' => 'verbose', 'stat' => '+', 'value' => true],
+            ['name' => 'timeout', 'stat' => '-', 'value' => 50]
+        ];
+        $difNotesSorted = [
+            ['name' => 'follow', 'stat' => '-', 'value' => false],
+            ['name' => 'timeout', 'stat' => '-', 'value' => 50],
+            ['name' => 'timeout', 'stat' => '+', 'value' => 20],
+            ['name' => 'verbose', 'stat' => '+', 'value' => true]
+        ];
+        $this->assertEquals(
+            $difNotesSorted,
+            sortDifNotes($difNotesUnsorted)
         );
     }
 
