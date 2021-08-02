@@ -3,7 +3,6 @@
 namespace Differ\Differ;
 
 use function Differ\Differ\Parsers\getDataFromFile;
-use function Differ\Differ\Parsers\convertToString;
 use function Differ\Differ\Parsers\stylish;
 use function Differ\Differ\DifStructure\setDifNote;
 use function Differ\Differ\DifStructure\sortDifNotes;
@@ -18,7 +17,7 @@ function genDiff(string $filePath1, string $filePath2)
     $data2 = getDataFromFile($filePath2);
     $result = getDifference($data1, $data2);
 
-    return convertToString($result);
+    return stylish($result);
 }
 
 function getDifference(array $first, array $second): array

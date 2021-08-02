@@ -3,12 +3,12 @@ namespace Differ\Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
 use function Differ\Differ\getDifference;
-use function Differ\Differ\Parsers\convertToString;
-use function Differ\Differ\Parsers\parseSingleDiff;
+use function Differ\Differ\Parsers\stylish;
+use function Differ\Differ\Parsers\parseDifNote;
+use function Differ\Differ\Parsers\addIndent;
 use function Differ\Differ\DifStructure\setDifNote;
 use function Differ\Differ\DifStructure\sortDifNotes;
 
-use function Differ\Differ\Parsers\stylish;
 use function Differ\Differ\genDiff;
 
 class GenDiffTest extends TestCase
@@ -32,24 +32,15 @@ class GenDiffTest extends TestCase
         ['name' => 'timeout', 'stat' => '+', 'value' => 20],
         ['name' => 'verbose', 'stat' => '+', 'value' => true]
     ];
-    private $flatDiffString =
-        "- follow: false" . PHP_EOL .
-        "  host: hexlet.io" . PHP_EOL .
-        "- proxy: 123.234.53.22" . PHP_EOL .
-        "- timeout: 50" . PHP_EOL .
-        "+ timeout: 20" . PHP_EOL .
-        "+ verbose: true" . PHP_EOL;
-
     private $flatDiffFormatted =
         "{" . PHP_EOL .
-        "- follow: false" . PHP_EOL .
-        "  host: hexlet.io" . PHP_EOL .
-        "- proxy: 123.234.53.22" . PHP_EOL .
-        "- timeout: 50" . PHP_EOL .
-        "+ timeout: 20" . PHP_EOL .
-        "+ verbose: true" . PHP_EOL .
+        "  - follow: false" . PHP_EOL .
+        "    host: hexlet.io" . PHP_EOL .
+        "  - proxy: 123.234.53.22" . PHP_EOL .
+        "  - timeout: 50" . PHP_EOL .
+        "  + timeout: 20" . PHP_EOL .
+        "  + verbose: true" . PHP_EOL .
         "}" . PHP_EOL;
-
     public function testGetDifference(): void
     {
 
@@ -123,23 +114,40 @@ class GenDiffTest extends TestCase
         );
     }
 
-    public function testConvertToString(): void
+    public function testStylish(): void
     {
         $this->assertEquals(
-            $this->flatDiffString,
-            convertToString($this->flatDiffData)
+            $this->flatDiffFormatted,
+            stylish($this->flatDiffData)
         );
     }
-    public function testParseSingleDif()
+
+    public function testParseDifNote()
     {
         $difNote = ['name' => 'host', 'stat' => '+', 'value' => 'hexlet.io'];
         $difExp = "+ host: hexlet.io";
         $this->assertEquals(
             $difExp,
-            parseSingleDiff($difNote)
+            parseDifNote($difNote)
         );
     }
-
+    public function testAddIndent()
+    {
+        $difNotes = [
+            "- follow: false",
+            "+ host: hexlet.io"
+        ];
+        $difExp = [
+            "{", 
+            "  - follow: false",
+            "  + host: hexlet.io",
+            "}"
+        ];
+        $this->assertEquals(
+            $difExp,
+            addIndent($difNotes)
+        );
+    }
     public function testGenDiff()
     {
         $jsonPath1 = __DIR__ . '/fixtures/file1.json';

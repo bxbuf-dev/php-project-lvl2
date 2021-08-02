@@ -8,6 +8,8 @@ use function Differ\Differ\DifStructure\getStat;
 use function Differ\Differ\DifStructure\getName;
 use function Differ\Differ\DifStructure\getValue;
 
+const INDENT = '  ';
+
 function getDataFromFile(string $filePath): array
 {
     $fileType = strstr($filePath, '.');
@@ -19,8 +21,14 @@ function getDataFromFile(string $filePath): array
     }
 }
 
+function stylish(array $difNotes): string
+{
+    $result = array_map(fn ($note) => parseDifNote($note), $difNotes);
+    $result = addIndent($result);
+    return implode(PHP_EOL, $result) . PHP_EOL;
+}
 
-function parseSingleDiff($difNote): string
+function parseDifNote($difNote): string
 {
     $name = getName($difNote);
     $stat = getStat($difNote);
@@ -28,23 +36,8 @@ function parseSingleDiff($difNote): string
     return str_replace('"', '', "{$stat} {$name}: " . json_encode($value, JSON_PRETTY_PRINT));
 }
 
-function convertToString(array $difNotes): string
+function addIndent(array $difNotes): array
 {
-    $result = [];
-    foreach ($difNotes as $note) {
-        $name = getName($note);
-        $stat = getStat($note);
-        $value = getValue($note);
-        $result[] = "{$stat} {$name}: " . json_encode($value, JSON_PRETTY_PRINT);
-    }
-    return str_replace('"', '', implode(PHP_EOL, $result) . PHP_EOL);
-}
-
-function stylish(array $data): string
-{
-    $result = [];
-    foreach ($data as $key) {
-        $result[] = "{$key['stat']} {$key['name']}: " . json_encode($key['value']);
-    }
-    return str_replace('"', '', json_encode($result, JSON_PRETTY_PRINT));
+    $res = array_map(fn ($note) => is_array($note) ? addIndent($note) : INDENT . $note, $difNotes);
+    return array_merge(['{'], $res, ['}']);
 }
