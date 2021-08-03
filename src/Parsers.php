@@ -21,23 +21,37 @@ function getDataFromFile(string $filePath): array
     }
 }
 
-function stylish(array $difNotes): string
+function stylish($difNotes)
 {
-    $result = array_map(fn ($note) => parseDifNote($note), $difNotes);
-    $result = addIndent($result);
-    return implode(PHP_EOL, $result) . PHP_EOL;
+    print_r("\nCurrent loop =>\n");
+    print_r("{\n" . getStylish($difNotes) . "\n}\n");
+    return "{\n" . getStylish($difNotes) . "\n}\n";
+}
+function getStylish(array $difNotes, $indentNum = 1): string
+{
+    $res = [];
+    foreach ($difNotes as $note) {
+        $stat = getStat($note);
+        $name = getName($note);
+        $value = getValue($note);
+        if (!is_array($value)) {
+            $res[] = parseDifNote($note, $indentNum);
+        } else {
+            $res[] = str_repeat(INDENT, $indentNum) . "{$stat} {$name}: {";
+            $res[] = array_key_exists('name', $value) ?
+                parseDifNote($value, $indentNum) :
+                getStylish($value, $indentNum + 1);
+            $res[] = str_repeat(INDENT, $indentNum + 1) . "}";
+        }
+    }
+    return implode(PHP_EOL, $res);
 }
 
-function parseDifNote($difNote): string
+function parseDifNote($difNote, int $indentNum = 0): string
 {
     $name = getName($difNote);
     $stat = getStat($difNote);
     $value = getValue($difNote);
-    return str_replace('"', '', "{$stat} {$name}: " . json_encode($value, JSON_PRETTY_PRINT));
-}
-
-function addIndent(array $difNotes): array
-{
-    $res = array_map(fn ($note) => is_array($note) ? addIndent($note) : INDENT . $note, $difNotes);
-    return array_merge(['{'], $res, ['}']);
+    $value = is_bool($value) ? ($value ? "true" : "false") : $value;
+    return str_repeat("  ", $indentNum) . "{$stat} {$name}: " . $value;
 }

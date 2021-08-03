@@ -9,6 +9,9 @@ use function Differ\Differ\Parsers\addIndent;
 use function Differ\Differ\DifStructure\setDifNote;
 use function Differ\Differ\DifStructure\sortDifNotes;
 
+use function Differ\Differ\Parsers\parseDifNotes;
+
+
 use function Differ\Differ\genDiff;
 
 class GenDiffTest extends TestCase
@@ -120,6 +123,39 @@ class GenDiffTest extends TestCase
             $this->flatDiffFormatted,
             stylish($this->flatDiffData)
         );
+
+        $difNotes = [
+            ['name' => 'host', 'stat' => ' ', 'value' => 'hexlet.io'],
+            ['name' => 'misc',
+                'stat' => ' ',
+                'value' => [
+                    ['name' => 'follow', 'stat' => '-', 'value' => false],
+                    [
+                        'name' => 'timeout',
+                        'stat' => '-',
+                        'value' => [
+                            ['name' => 'verbose', 'stat' => '+', 'value' => true]
+                        ],
+                    ]
+                ]
+            ],
+            ['name' => 'proxy', 'stat' => '-', 'value' => '122.122.122.122'],
+        ];
+        $difExp =
+            "{" . PHP_EOL .
+            "    host: hexlet.io" . PHP_EOL .
+            "    misc: {" . PHP_EOL .
+            "    - follow: false" . PHP_EOL .
+            "    - timeout: {" . PHP_EOL .
+            "      + verbose: true" . PHP_EOL .
+            "      }" . PHP_EOL .
+            "    }" . PHP_EOL .
+            "  - proxy: 122.122.122.122" . PHP_EOL .
+            "}" . PHP_EOL;
+        $this->assertEquals(
+            $difExp,
+            stylish($difNotes)
+        );
     }
 
     public function testParseDifNote()
@@ -131,23 +167,7 @@ class GenDiffTest extends TestCase
             parseDifNote($difNote)
         );
     }
-    public function testAddIndent()
-    {
-        $difNotes = [
-            "- follow: false",
-            "+ host: hexlet.io"
-        ];
-        $difExp = [
-            "{", 
-            "  - follow: false",
-            "  + host: hexlet.io",
-            "}"
-        ];
-        $this->assertEquals(
-            $difExp,
-            addIndent($difNotes)
-        );
-    }
+
     public function testGenDiff()
     {
         $jsonPath1 = __DIR__ . '/fixtures/file1.json';
