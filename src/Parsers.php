@@ -23,8 +23,8 @@ function getDataFromFile(string $filePath): array
 
 function stylish($difNotes)
 {
-    print_r("\nCurrent loop =>\n");
-    print_r("{\n" . getStylish($difNotes) . "\n}\n");
+//    print_r("\nCurrent loop =>\n");
+//    print_r("{\n" . getStylish($difNotes) . "\n}\n");
     return "{\n" . getStylish($difNotes) . "\n}\n";
 }
 function getStylish(array $difNotes, $indentNum = 1): string

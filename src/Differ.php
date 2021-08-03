@@ -11,13 +11,13 @@ const STAT_NO_DIFF = ' ';
 const STAT_DIF_IN_1 = '-';
 const STAT_DIF_IN_2 = '+';
 
-function genDiff(string $filePath1, string $filePath2)
+function genDiff(string $filePath1, string $filePath2, string $format = 'stylish')
 {
     $data1 = getDataFromFile($filePath1);
     $data2 = getDataFromFile($filePath2);
     $result = getDifference($data1, $data2);
 
-    return stylish($result);
+    return $format == "stylish" ? stylish($result) : "\nFormat {$format} is coming soon\n";
 }
 
 function getDifference(array $first, array $second): array
