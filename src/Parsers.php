@@ -32,11 +32,8 @@ function getStylish(array $difNotes, $indentNum = 1): string
         $stat = getStat($note);
         $name = getName($note);
         $value = getValue($note);
-        if (!is_array($value)) {
-            $res[] = parseDifNote($note, $indentNum);
-        } else {
-            $res[] = substr(str_repeat(INDENT, $indentNum), 0, -2)
-                . "{$stat} {$name}: {";
+        $res[] = parseDifNote($note, $indentNum);
+        if (is_array($value)) {
             $res[] = array_key_exists('name', $value) ?
                 parseDifNote($value, $indentNum) :
                 getStylish($value, $indentNum + 1);
@@ -51,6 +48,8 @@ function parseDifNote($difNote, int $indentNum = 0): string
     $name = getName($difNote);
     $stat = getStat($difNote);
     $value = getValue($difNote);
+
+    $value = is_array($value) ? "{" : $value;
     $value = is_bool($value) ? ($value ? "true" : "false") : $value ?? "null";
     return substr(str_repeat(INDENT, $indentNum), 0, -2) .
         "{$stat} {$name}: " . $value;
