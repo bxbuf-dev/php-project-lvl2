@@ -40,12 +40,12 @@ function sortDifNotes($difNotes): array
     //can't use any sort functions because of the undefined order for equal array
     //make my own sort by "stat" key.
     $max = count($difNotes) - 1;
-    for ($i =0; $i < $max; $i++) {
+    for ($i = 0; $i < $max; $i++) {
         if ($difNotes[$i]['name'] == $difNotes[$i + 1]['name']) {
-            if($difNotes[$i]['stat'] == '+') {
+            if ($difNotes[$i]['stat'] == '+') {
                 $tmp = $difNotes[$i];
-                $difNotes[$i] = $difNotes[$i +1];
-                $difNotes[$i + 1] = $tmp; 
+                $difNotes[$i] = $difNotes[$i + 1];
+                $difNotes[$i + 1] = $tmp;
             }
         }
     }

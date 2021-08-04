@@ -52,6 +52,6 @@ function parseDifNote($difNote, int $indentNum = 0): string
     $stat = getStat($difNote);
     $value = getValue($difNote);
     $value = is_bool($value) ? ($value ? "true" : "false") : $value ?? "null";
-    return substr(str_repeat(INDENT, $indentNum), 0, -2) . 
+    return substr(str_repeat(INDENT, $indentNum), 0, -2) .
         "{$stat} {$name}: " . $value;
 }
