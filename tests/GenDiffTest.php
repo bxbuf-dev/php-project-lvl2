@@ -192,6 +192,13 @@ class GenDiffTest extends TestCase
             $this->getDiffStylish(),
             genDiff($jsonPath1, $jsonPath2)
         );
+
+        $jsonPath1 = __DIR__ . '/fixtures/C_file1.yml';
+        $jsonPath2 = __DIR__ . '/fixtures/C_file2.yaml';
+        $this->assertEquals(
+            $this->getDiffStylish(),
+            genDiff($jsonPath1, $jsonPath2)
+        );
     }
 
     public function testSetDiffNote(): void
