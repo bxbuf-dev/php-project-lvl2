@@ -5,7 +5,6 @@ use PHPUnit\Framework\TestCase;
 use function Differ\Differ\getDifference;
 use function Differ\Differ\Parsers\stylish;
 use function Differ\Differ\Parsers\parseDifNote;
-use function Differ\Differ\Parsers\addIndent;
 use function Differ\Differ\DifStructure\setDifNote;
 use function Differ\Differ\DifStructure\sortDifNotes;
 
@@ -145,10 +144,10 @@ class GenDiffTest extends TestCase
             "{" . PHP_EOL .
             "    host: hexlet.io" . PHP_EOL .
             "    misc: {" . PHP_EOL .
-            "    - follow: false" . PHP_EOL .
-            "    - timeout: {" . PHP_EOL .
-            "      + verbose: true" . PHP_EOL .
-            "      }" . PHP_EOL .
+            "      - follow: false" . PHP_EOL .
+            "      - timeout: {" . PHP_EOL .
+            "          + verbose: true" . PHP_EOL .
+            "        }" . PHP_EOL .
             "    }" . PHP_EOL .
             "  - proxy: 122.122.122.122" . PHP_EOL .
             "}" . PHP_EOL;
@@ -186,6 +185,13 @@ class GenDiffTest extends TestCase
             $this->getDiffString(),
             genDiff($yamlPath1, $yamlPath2, "stylish")
         );
+
+        $jsonPath1 = __DIR__ . '/fixtures/C_file1.json';
+        $jsonPath2 = __DIR__ . '/fixtures/C_file2.json';
+        $this->assertEquals(
+            $this->getDiffStylish(),
+            genDiff($jsonPath1, $jsonPath2)
+        );
     }
 
     public function testSetDiffNote(): void
@@ -218,7 +224,25 @@ class GenDiffTest extends TestCase
             setDifNote($key, $value, $stat)
         );
     }
-
+    public function testSortDifNotes(): void
+    {
+        $unsorted = [
+                    ['name' => 'foo', 'stat' => ' ', 'value' => 'bar'],
+                    ['name' => 'baz', 'stat' => '+', 'value' => 'bars'],
+                    ['name' => 'baz', 'stat' => '-', 'value' => 'bas'],
+                    ['name' => 'nest', 'stat' => '+', 'value' => 'str']
+        ];
+        $sorted = [
+                    ['name' => 'baz', 'stat' => '-', 'value' => 'bas'],
+                    ['name' => 'baz', 'stat' => '+', 'value' => 'bars'],
+                    ['name' => 'foo', 'stat' => ' ', 'value' => 'bar'],
+                    ['name' => 'nest', 'stat' => '+', 'value' => 'str']
+        ];
+        $this->assertEquals(
+            $sorted,
+            sortDifNotes($unsorted)
+        );
+    }
     private function getDiffString(): string
     {
         return file_get_contents(__DIR__ . '/fixtures/FilesDifference.txt');

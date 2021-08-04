@@ -37,12 +37,17 @@ function sortDifNotes($difNotes): array
     //sort by 'name' key
     $name = array_column($difNotes, 'name');
     array_multisort($difNotes, $name, SORT_DESC);
-    // sort same names by by 'stat' key
-    usort($difNotes, function ($a, $b) {
-        if ($a['name'] != $b['name']) {
-            return 0;
+    //can't use any sort functions because of the undefined order for equal array
+    //make my own sort by "stat" key.
+    $max = count($difNotes) - 1;
+    for ($i =0; $i < $max; $i++) {
+        if ($difNotes[$i]['name'] == $difNotes[$i + 1]['name']) {
+            if($difNotes[$i]['stat'] == '+') {
+                $tmp = $difNotes[$i];
+                $difNotes[$i] = $difNotes[$i +1];
+                $difNotes[$i + 1] = $tmp; 
+            }
         }
-        return $a['stat'] == '-' ? -1 : 1;
-    });
+    }
     return $difNotes;
 }

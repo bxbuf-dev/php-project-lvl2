@@ -8,7 +8,7 @@ use function Differ\Differ\DifStructure\getStat;
 use function Differ\Differ\DifStructure\getName;
 use function Differ\Differ\DifStructure\getValue;
 
-const INDENT = '  ';
+const INDENT = '    ';
 
 function getDataFromFile(string $filePath): array
 {
@@ -23,8 +23,6 @@ function getDataFromFile(string $filePath): array
 
 function stylish($difNotes)
 {
-//    print_r("\nCurrent loop =>\n");
-//    print_r("{\n" . getStylish($difNotes) . "\n}\n");
     return "{\n" . getStylish($difNotes) . "\n}\n";
 }
 function getStylish(array $difNotes, $indentNum = 1): string
@@ -37,11 +35,12 @@ function getStylish(array $difNotes, $indentNum = 1): string
         if (!is_array($value)) {
             $res[] = parseDifNote($note, $indentNum);
         } else {
-            $res[] = str_repeat(INDENT, $indentNum) . "{$stat} {$name}: {";
+            $res[] = substr(str_repeat(INDENT, $indentNum), 0, -2)
+                . "{$stat} {$name}: {";
             $res[] = array_key_exists('name', $value) ?
                 parseDifNote($value, $indentNum) :
                 getStylish($value, $indentNum + 1);
-            $res[] = str_repeat(INDENT, $indentNum + 1) . "}";
+            $res[] = str_repeat(INDENT, $indentNum) . "}";
         }
     }
     return implode(PHP_EOL, $res);
@@ -52,6 +51,7 @@ function parseDifNote($difNote, int $indentNum = 0): string
     $name = getName($difNote);
     $stat = getStat($difNote);
     $value = getValue($difNote);
-    $value = is_bool($value) ? ($value ? "true" : "false") : $value;
-    return str_repeat("  ", $indentNum) . "{$stat} {$name}: " . $value;
+    $value = is_bool($value) ? ($value ? "true" : "false") : $value ?? "null";
+    return substr(str_repeat(INDENT, $indentNum), 0, -2) . 
+        "{$stat} {$name}: " . $value;
 }
