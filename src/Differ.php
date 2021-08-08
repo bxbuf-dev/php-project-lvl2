@@ -3,9 +3,9 @@
 namespace Differ\Differ;
 
 use function Differ\Differ\Parsers\getDataFromFile;
-use function Differ\Differ\Parsers\stylish;
 use function Differ\Differ\DifStructure\setDifNote;
 use function Differ\Differ\DifStructure\sortDifNotes;
+use function Differ\Differ\Formatters\getFormatted;
 
 const STAT_NO_DIFF = ' ';
 const STAT_DIF_IN_1 = '-';
@@ -15,9 +15,9 @@ function genDiff(string $filePath1, string $filePath2, string $format = 'stylish
 {
     $data1 = getDataFromFile($filePath1);
     $data2 = getDataFromFile($filePath2);
-    $result = getDifference($data1, $data2);
+    $difNotes = getDifference($data1, $data2);
 
-    return $format == "stylish" ? stylish($result) : "\nFormat {$format} is coming soon\n";
+    return getFormatted($difNotes, $format);
 }
 
 function getDifference(array $first, array $second): array

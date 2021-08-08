@@ -17,12 +17,12 @@ function setDifNote(string $key, $value, string $stat, $parsValue = true): array
     return $dif;
 }
 
-function getStat($dif)
+function getStat($dif): string
 {
     return $dif['stat'];
 }
 
-function getName($dif)
+function getName($dif): string
 {
     return $dif['name'];
 }
