@@ -114,10 +114,12 @@ class GenDiffTest extends TestCase
             $this->getDiffString(),
             genDiff($jsonPath1, $jsonPath2)
         );
+
         $this->assertEquals(
-            "\nFormat json is coming soon... probably\n",
+            $this->getDiffJson(),
             genDiff($jsonPath1, $jsonPath2, "json")
         );
+
         $yamlPath1 = __DIR__ . '/fixtures/file1.yaml';
         $yamlPath2 = __DIR__ . '/fixtures/file2.yml';
         $this->assertEquals(
@@ -197,5 +199,9 @@ class GenDiffTest extends TestCase
     private function getDiffStylish(): string
     {
         return file_get_contents(__DIR__ . '/fixtures/C_FilesDifference.txt');
+    }
+    private function getDiffJson(): string
+    {
+        return file_get_contents(__DIR__ . '/fixtures/FilesDifference.json');
     }
 }
