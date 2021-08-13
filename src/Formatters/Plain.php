@@ -9,7 +9,7 @@ use function Differ\Differ\DifStructure\getValue;
 function plain(array $difNotes): string
 {
     $res = flatten(getPlain($difNotes));
-    return implode(PHP_EOL, $res) . PHP_EOL;
+    return implode(PHP_EOL, $res);
 }
 
 function getPlain($difNotes, string $printName = ""): array

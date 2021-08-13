@@ -32,7 +32,7 @@ class FormattersTest extends TestCase
         "Property 'host' was added with value: 'hexlet.io'" . PHP_EOL .
         "Property 'proxy' was removed" . PHP_EOL .
         "Property 'timeout' was updated. From 50 to 20" . PHP_EOL .
-        "Property 'verbose' was added with value: true" . PHP_EOL;
+        "Property 'verbose' was added with value: true";
     private $recDiffData = [
             ['name' => 'host', 'stat' => '+', 'value' => 'hexlet.io'],
             ['name' => 'misc',
@@ -67,7 +67,7 @@ class FormattersTest extends TestCase
         "Property 'host' was added with value: 'hexlet.io'" . PHP_EOL .
         "Property 'misc.follow' was removed" . PHP_EOL .
         "Property 'misc.timeout.verbose' was added with value: true" . PHP_EOL .
-        "Property 'proxy' was removed" . PHP_EOL;
+        "Property 'proxy' was removed";
 
 
     public function testStylish(): void
