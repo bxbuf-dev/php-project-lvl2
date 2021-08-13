@@ -11,7 +11,7 @@ const STAT_NO_DIFF = ' ';
 const STAT_DIF_IN_1 = '-';
 const STAT_DIF_IN_2 = '+';
 
-function genDiff(string $filePath1, string $filePath2, string $format = 'stylish')
+function genDiff(string $filePath1, string $filePath2, string $format = 'stylish'): string
 {
     $data1 = getDataFromFile($filePath1);
     $data2 = getDataFromFile($filePath2);
