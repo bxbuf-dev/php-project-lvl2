@@ -43,6 +43,7 @@ class FormattersTest extends TestCase
                         'name' => 'timeout',
                         'stat' => ' ',
                         'value' => [
+                            ['name' => 'isNested', 'stat' => '-', 'value' => 'true'],
                             ['name' => 'verbose', 'stat' => '+', 'value' => true]
                         ],
                     ]
@@ -57,6 +58,7 @@ class FormattersTest extends TestCase
         "    misc: {" . PHP_EOL .
         "      - follow: false" . PHP_EOL .
         "        timeout: {" . PHP_EOL .
+        "          - isNested: true" . PHP_EOL .
         "          + verbose: true" . PHP_EOL .
         "        }" . PHP_EOL .
         "    }" . PHP_EOL .
@@ -66,6 +68,7 @@ class FormattersTest extends TestCase
     private $recDiffPlain =
         "Property 'host' was added with value: 'hexlet.io'" . PHP_EOL .
         "Property 'misc.follow' was removed" . PHP_EOL .
+        "Property 'misc.timeout.isNested' was removed" . PHP_EOL .
         "Property 'misc.timeout.verbose' was added with value: true" . PHP_EOL .
         "Property 'proxy' was removed";
 
