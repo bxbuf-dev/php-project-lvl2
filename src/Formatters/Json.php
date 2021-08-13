@@ -21,24 +21,26 @@ function getJson(array $difNotes): array
         $stat = getStat($difNotes[$i]);
         $name = getName($difNotes[$i]);
         $value = getValue($difNotes[$i]);
+        $resValue = is_array($value) ? getJson($value) : $value;
         if ($stat == " ") {
-            $res[$name] = is_array($value) ? getJson($value) : [$value, $value];
+            $res[$name] = [$resValue, $resValue];
             continue;
         }
         if ($stat == "+") {
-            $res[$name] = is_array($value) ? getJson($value) : ["", $value];
+            $res[$name] = ["", $resValue];
             continue;
         }
         if (!array_key_exists($i + 1, $difNotes)) {
-            $res[$name] = is_array($value) ? getJson($value) : [$value, ""];
+            $res[$name] = [$resValue, ""];
             continue;
         }
         $nameNext = getName($difNotes[$i + 1]);
         if ($name != $nameNext) {
-            $res[$name] = is_array($value) ? getJson($value) : [$value, ""];
+            $res[$name] = [$resValue, ""];
         } else {
             $valueNext = getValue($difNotes[$i + 1]);
-            $res[$name] = is_array($value) ? getJson($value) : [$value, $valueNext];
+            $valueNext = is_array($valueNext) ? getJson($valueNext) : $valueNext;
+            $res[$name] = [$resValue, $valueNext];
             $i++;
         }
     }
