@@ -33,7 +33,9 @@ function getPlain($difNotes, string $printName = ""): array
             $res[] = "Property '{$name}' was added with value: {$printValue}";
             continue;
         }
+        // stat = '-'
         if (!array_key_exists($i + 1, $difNotes)) {
+            $name = $printName . $name;
             $res[] = "Property '{$name}' was removed";
             continue;
         }

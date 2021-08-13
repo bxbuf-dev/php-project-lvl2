@@ -73,6 +73,37 @@ class FormattersTest extends TestCase
         "Property 'proxy' was removed";
 
 
+    private $recDiffTestPlain = 
+"Property 'group4.isNested' was updated. From false to 'none'
+Property 'group4.key' was added with value: false
+Property 'group4.nest.bar' was updated. From '' to 0
+Property 'group4.nest.isNested' was removed
+Property 'group4.someKey' was added with value: true
+Property 'group4.type' was updated. From 'bas' to 'bar'";
+    private $recDiffTest = [
+        [
+            'name' => 'group4',
+            'stat' => ' ',
+            'value' => [
+                ['name' => 'isNested', 'stat' => '-', 'value' => false],
+                ['name' => 'isNested', 'stat' => '-', 'value' => 'none'],
+                ['name' => 'key', 'stat' => '+', 'value' => false],
+                [
+                    'name' => 'nest',
+                    'stat' => ' ',
+                    'value' => [
+                        ['name' => 'bar', 'stat' => '-', 'value' => ''],
+                        ['name' => 'bar', 'stat' => '+', 'value' => 0],
+                        ['name' => 'isNested', 'stat' => '-', 'value' => true]
+                    ]
+                ],
+                ['name' => 'someKey', 'stat' => '+', 'value' => true],
+                ['name' => 'type', 'stat' => '-', 'value' => 'bas'],
+                ['name' => 'type', 'stat' => '+', 'value' => 'bar']
+            ]
+        ]
+    ];
+
     public function testStylish(): void
     {
         $this->assertEquals(
@@ -100,6 +131,10 @@ class FormattersTest extends TestCase
         $this->assertEquals(
             $this->flatDiffPlain,
             plain($this->flatDiffData)
+        );
+        $this->assertEquals(
+            $this->recDiffTestPlain,
+            plain($this->recDiffTest)
         );
         $this->assertEquals(
             $this->recDiffPlain,
