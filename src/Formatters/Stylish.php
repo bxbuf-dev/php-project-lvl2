@@ -10,7 +10,7 @@ const INDENT = '    ';
 
 function stylish($difNotes): string
 {
-    return "{\n" . getStylish($difNotes) . "\n}\n";
+    return "{\n" . getStylish($difNotes) . "\n}";
 }
 function getStylish(array $difNotes, $indentNum = 1): string
 {

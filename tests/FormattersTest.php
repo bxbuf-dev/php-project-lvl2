@@ -25,7 +25,7 @@ class FormattersTest extends TestCase
         "  - timeout: 50" . PHP_EOL .
         "  + timeout: 20" . PHP_EOL .
         "  + verbose: true" . PHP_EOL .
-        "}" . PHP_EOL;
+        "}";
 
     private $flatDiffPlain =
         "Property 'follow' was removed" . PHP_EOL .
@@ -61,7 +61,7 @@ class FormattersTest extends TestCase
         "        }" . PHP_EOL .
         "    }" . PHP_EOL .
         "  - proxy: 122.122.122.122" . PHP_EOL .
-        "}" . PHP_EOL;
+        "}";
 
     private $recDiffPlain =
         "Property 'host' was added with value: 'hexlet.io'" . PHP_EOL .
