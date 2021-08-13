@@ -21,33 +21,30 @@ function getPlain($difNotes, string $printName = ""): array
         $name = getName($difNotes[$i]);
         $value = getValue($difNotes[$i]);
         $printValue = formatValue($value);
+        $fullName = $printName . $name;
         if ($stat == " ") {
             if (is_array($value)) {
-                $name = $printName . $name . ".";
-                $res[] = getPlain($value, $name);
+                $fullName = $fullName . ".";
+                $res[] = getPlain($value, $fullName);
             }
             continue;
         }
         if ($stat == "+") {
-            $name = $printName . $name;
-            $res[] = "Property '{$name}' was added with value: {$printValue}";
+            $res[] = "Property '{$fullName}' was added with value: {$printValue}";
             continue;
         }
         // stat = '-'
         if (!array_key_exists($i + 1, $difNotes)) {
-            $name = $printName . $name;
-            $res[] = "Property '{$name}' was removed";
+            $res[] = "Property '{$fullName}' was removed";
             continue;
         }
         $nameNext = getName($difNotes[$i + 1]);
         if ($name != $nameNext) {
-            $name = $printName . $name;
-            $res[] = "Property '{$name}' was removed";
+            $res[] = "Property '{$fullName}' was removed";
         } else {
-            $name = $printName . $name;
             $valueNext = getValue($difNotes[$i + 1]);
             $printValueNext = formatValue($valueNext);
-            $res[] = "Property '{$name}' was updated. From {$printValue} to {$printValueNext}";
+            $res[] = "Property '{$fullName}' was updated. From {$printValue} to {$printValueNext}";
             $i++;
         }
     }
